@@ -21,6 +21,8 @@ def generate_latest(registry):
                 output.append('# UNIT {0} {1}\n'.format(mname, metric.unit))
             for s in metric.samples:
                 if s.labels:
+                    if 'method' in s.labels and s.labels['method'] is None:
+                        s.labels['method'] = "GET request"
                     labelstr = '{{{0}}}'.format(','.join(
                         ['{0}="{1}"'.format(
                             k, v.replace('\\', r'\\').replace('\n', r'\n').replace('"', r'\"'))

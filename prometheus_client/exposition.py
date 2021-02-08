@@ -89,7 +89,14 @@ def generate_latest(registry=REGISTRY):
     """Returns the metrics from the registry in latest text format as a string."""
 
     def sample_line(line):
+        if 'timestamp' in line and line['timestamp'] is None:
+            line['timestamp'] = "00:00"
+        if 'exemplar' in line and line['exemplar'] is None:
+            line['exemplar'] = "0"
         if line.labels:
+            # change None to something idk?
+            if 'method' in line.labels and line.labels['method'] is None:
+                line.labels['method'] = "GET request"
             labelstr = '{{{0}}}'.format(','.join(
                 ['{0}="{1}"'.format(
                     k, v.replace('\\', r'\\').replace('\n', r'\n').replace('"', r'\"'))
